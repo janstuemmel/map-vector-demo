@@ -78,6 +78,11 @@ map.on('load', () => {
     'water-ocean',
   );
 
+  // 3D terrain
+  map.addControl(new TerrainControl({source: 'aws-terrain', exaggeration: 1}));
+  map.setTerrain({source: 'aws-terrain', exaggeration: 1});
+
+  // debug
   map.on('moveend', () => {
     const {
       _ne: {lng: neLng, lat: neLat},
@@ -87,8 +92,4 @@ map.on('load', () => {
       `Zoom: ${map.getZoom()}, bounds: [${swLng}, ${swLat}, ${neLng}, ${neLat}]`,
     );
   });
-
-  // 3D terrain
-  // map.addControl(new TerrainControl({source: 'aws-terrain', exaggeration: 1}));
-  // map.setTerrain({source: 'aws-terrain', exaggeration: 1});
 });
