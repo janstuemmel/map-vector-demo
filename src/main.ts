@@ -9,7 +9,9 @@ import {administrative} from './layers/administrative';
 import {infrastructure} from './layers/infrastructure';
 import {labels} from './layers/labels';
 import {land} from './layers/land';
+import {poi} from './layers/poi';
 import {water} from './layers/water';
+import {addTerrain} from './terrain';
 
 const style = empty({
   tiles: ['/tiles/osm/{z}/{x}/{y}'],
@@ -39,6 +41,7 @@ const layers: LayerSpecification[] = [
   ...administrative,
   ...infrastructure,
   ...labels,
+  ...poi,
 ];
 
 const map = new MapLibre({
@@ -46,42 +49,13 @@ const map = new MapLibre({
   style: {...style, layers},
   center: [10, 45],
   zoom: 4,
-  maxZoom: 14,
+  maxZoom: 15,
+  hash: true,
   // bounds: []
 });
 
 map.on('load', () => {
-  map.addSource('aws-terrain', {
-    type: 'raster-dem',
-    tiles: [
-      'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
-    ],
-    encoding: 'terrarium',
-    tileSize: 256,
-    attribution:
-      '© <a href="https://www.mapzen.com/rights">Mapzen</a> and <a href="https://www.mapzen.com/rights/#services-and-data-sources">others</a>',
-  });
-
-  map.addLayer(
-    {
-      id: 'hills',
-      source: 'aws-terrain',
-      type: 'hillshade',
-      layout: {visibility: 'visible'},
-      maxzoom: 15,
-      paint: {
-        'hillshade-exaggeration': 1,
-        'hillshade-accent-color': 'hsla(0, 0%, 0%, 0.5)',
-        'hillshade-highlight-color': 'hsla(100, 100%, 100%, 0.3)',
-        'hillshade-shadow-color': 'hsla(0, 0%, 0%, 0.3)',
-      },
-    },
-    'water-ocean',
-  );
-
-  // 3D terrain
-  map.addControl(new TerrainControl({source: 'aws-terrain', exaggeration: 1}));
-  map.setTerrain({source: 'aws-terrain', exaggeration: 1});
+  addTerrain(map);
 
   // debug
   map.on('moveend', () => {

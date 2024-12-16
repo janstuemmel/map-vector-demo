@@ -46,6 +46,23 @@ export const land: LayerSpecification[] = [
     },
   },
   {
+    id: 'land-residential',
+    type: 'fill',
+    'source-layer': 'land',
+    filter: ['all', ['in', 'kind', 'garages', 'residential']],
+    source: 'versatiles-shortbread',
+    paint: {
+      'fill-color': '#e0e0e0',
+      'fill-opacity': {
+        type: 'exponential',
+        stops: [
+          [10, 0],
+          [11, 1],
+        ],
+      },
+    },
+  },
+  {
     id: 'land-forest',
     type: 'fill',
     'source-layer': 'land',

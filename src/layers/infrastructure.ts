@@ -2,6 +2,43 @@ import type {LayerSpecification} from 'maplibre-gl';
 
 export const infrastructure: LayerSpecification[] = [
   {
+    id: 'street-residential',
+    type: 'line',
+    'source-layer': 'streets',
+    filter: [
+      'all',
+      ['==', 'kind', 'residential'],
+      ['!=', 'bridge', true],
+      ['!=', 'tunnel', true],
+    ],
+    source: 'versatiles-shortbread',
+    paint: {
+      'line-color': '#ffffff',
+      'line-width': {
+        type: 'interval',
+        stops: [
+          [12, 1],
+          [14, 2],
+          [16, 5],
+          [18, 24],
+          [19, 60],
+          [20, 120],
+        ],
+      },
+      'line-opacity': {
+        type: 'exponential',
+        stops: [
+          [12, 0],
+          [13, 1],
+        ],
+      },
+    },
+    layout: {
+      'line-join': 'round',
+      'line-cap': 'round',
+    },
+  },
+  {
     id: 'street-track',
     type: 'line',
     'source-layer': 'streets',
